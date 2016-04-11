@@ -29,3 +29,9 @@ Route::get('/', function () {
 Route::group(['middleware' => ['web']], function () {
     //
 });
+
+Route::get('/auth/logout', 'AuthNewController@logout');
+Route::get('/auth/google','AuthNewController@handleProviderCallback');
+Route::get('/auth/verify','AuthNewController@verifyUser');
+Route::post('/auth/verify','AuthNewController@verifyUserPost');
+Route::get('/auth/login', 'AuthNewController@redirectToProvider');
