@@ -1,78 +1,86 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Laravel</title>
+        <title>Attendance Manager</title>
 
         <link href="{{asset('css/fullcalendar.min.css')}}" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
         <script src="{{asset('js/jquery.min.js')}}"></script>
+        <script src="{{asset('js/bootstrap.min.js')}}"></script>
         <script src="{{asset('js/jquery.ui.touch-punch.min.js')}}"></script>
         <script src="{{asset('js/moment.js')}}"></script>
         <script src="{{asset('js/fullcalendar.min.js')}}"></script>
         <script>
 
             $(document).ready(function() {
+                var utc = new Date().toJSON().slice(0,10);
+                var startTime,endTime;
+                var start = true;
 
                 $('#calendar').fullCalendar({
                     header: {
                         left: 'prev,next today',
-                        center: 'title',
-                        right: 'month,agendaWeek,agendaDay'
+                        center: 'title'
                     },
-                    defaultDate: '2014-06-12',
+                    timezone: 'local',
                     dayClick: function(date, jsEvent, view) {
-
-                        alert('Clicked on: ' + date.format());
-
-                        alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-
-                        alert('Current view: ' + view.name);
-
-                        // change the day's background color just for fun
-                        $(this).css('background-color', 'red');
+                        if(start){
+                            startTime = date._d.toLocaleTimeString();
+                            start=false;
+                        }
+                        else{
+                            endTime = date._d.toLocaleTimeString();
+                            start = true;
+                        }
+                        $('#register').modal();
 
                     },
-                    defaultView: 'month',
+                    defaultView: 'agendaWeek',
                     editable: true,
-                    events: [
-                        {
-                            title: 'All Day Event',
-                            start: '2014-06-01'
-                        },
-                        {
-                            title: 'Long Event',
-                            start: '2014-06-07',
-                            end: '2014-06-10'
-                        },
-                        {
-                            id: 999,
-                            title: 'Repeating Event',
-                            start: '2014-06-09T16:00:00'
-                        },
-                        {
-                            id: 999,
-                            title: 'Repeating Event',
-                            start: '2014-06-16T16:00:00'
-                        },
-                        {
-                            title: 'Meeting',
-                            start: '2014-06-12T10:30:00',
-                            end: '2014-06-12T12:30:00'
-                        },
-                        {
-                            title: 'Lunch',
-                            start: '2014-06-12T12:00:00'
-                        },
-                        {
-                            title: 'Birthday Party',
-                            start: '2014-06-13T07:00:00'
-                        },
-                        {
-                            title: 'Click for Google',
-                            url: 'http://google.com/',
-                            start: '2014-06-28'
-                        }
-                    ]
+                    events: []
 
+                });
+                var modal = $('#register');
+                $(modal).on('show.bs.modal', function (event) {
+                    var modal = $(this);
+                    modal.find('#start').val(startTime);
+                    if(endTime!=undefined){
+                        modal.find('#end').parent().show();
+                        if(Date.parse('01/01/2011 '+startTime) > Date.parse('01/01/2011 '+endTime)){
+                            modal.find('#end').parent().addClass('has-error');
+                            $('span.error-time').show();
+                        }
+                        else{
+                            modal.find('#end').parent().removeClass('has-error');
+                            $('span.error-time').hide();
+                        }
+                        modal.find('#end').val(endTime);
+                        endTime=undefined;
+                        modal.find('button.submit').text('Confirm Details');
+                    }
+                    else{
+                        modal.find('#end').parent().hide();
+                        modal.find('button.submit').text('Choose end time');
+                    }
+                });
+                $(modal).on('click','button.cancel', function () {
+                    start=!start;
+                });
+                $(modal).on('click','button.submit', function () {
+                    if($(this).text()=='Confirm Details'){
+                        $.ajax({
+                            url: '',//Make a route a type it here
+                            data: {
+                                start: startTime,
+                                end: endTime,
+                                course:modal.find('#code').val()
+                            },
+                            success: function(data) {
+                                //I'll work here
+                            },
+                            type: 'GET'
+                        });
+                    }
                 });
 
             });
@@ -81,7 +89,37 @@
     </head>
     <body>
     <div id="calendar"></div>
+    <div class="modal fade" role="dialog" id="register">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Course Details</h4>
+                </div>
+                <form action="">
+                <div class="modal-body">
 
+                    <div class="form-group">
+                        <label for="code">Course Code</label>
+                        <input type="text" class="form-control" id="code" placeholder="ABC123">
+                    </div>
+                    <div class="form-group">
+                        <label for="start">Start Timings (Click to edit)</label>
+                        <input type="text" class="form-control" id="start" placeholder="">
+                    </div>
+                    <div class="form-group" hidden>
+                        <label for="end">End Timings (Click to edit)</label>
+                        <input type="text" class="form-control" id="end" placeholder="">
+                        <span class="error-time" hidden>Please correct the error</span>
 
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger cancel" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary submit" data-dismiss="modal">Save changes</button>
+                </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     </body>
 </html>
