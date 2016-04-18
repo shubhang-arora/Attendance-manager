@@ -11,9 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -27,8 +24,18 @@ Route::get('/', function () {
 */
 
 Route::group(['middleware' => ['web']], function () {
-    //
+
+    Route::get('/', function () {
+        return view('addCourse');
+    });
+    Route::get('/attendance', function () {
+        return view('putAttendance');
+    });
+
+    Route::get('/dd', 'CoursesController@dd');
+
 });
+Route::post('/addCourse', 'CoursesController@addCourse');
 
 Route::get('/auth/logout', 'AuthNewController@logout');
 Route::get('/auth/google','AuthNewController@handleProviderCallback');

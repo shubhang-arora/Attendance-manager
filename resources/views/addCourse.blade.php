@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Attendance Manager</title>
-
-        <link href="{{asset('css/fullcalendar.min.css')}}" rel="stylesheet" type="text/css">
-        <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
-        <script src="{{asset('js/jquery.min.js')}}"></script>
-        <script src="{{asset('js/bootstrap.min.js')}}"></script>
-        <script src="{{asset('js/jquery.ui.touch-punch.min.js')}}"></script>
-        <script src="{{asset('js/moment.js')}}"></script>
-        <script src="{{asset('js/fullcalendar.min.js')}}"></script>
+@extends('layout')
+@section('scripts')
         <script>
 
             $(document).ready(function() {
@@ -68,8 +58,9 @@
                 });
                 $(modal).on('click','button.submit', function () {
                     if($(this).text()=='Confirm Details'){
+                        console.log(endTime);
                         $.ajax({
-                            url: '',//Make a route a type it here
+                            url: '/addCourse',//Make a route a type it here
                             data: {
                                 start: startTime,
                                 end: endTime,
@@ -78,7 +69,7 @@
                             success: function(data) {
                                 //I'll work here
                             },
-                            type: 'GET'
+                            type: 'POST'
                         });
                     }
                 });
@@ -86,8 +77,8 @@
             });
 
         </script>
-    </head>
-    <body>
+@endsection
+@section('content')
     <div id="calendar"></div>
     <div class="modal fade" role="dialog" id="register">
         <div class="modal-dialog">
@@ -121,5 +112,4 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    </body>
-</html>
+@endsection

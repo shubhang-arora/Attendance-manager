@@ -2,9 +2,9 @@
 
 namespace App;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class Timing extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,7 +12,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'course_id', 'start_time', 'end_time', 'created_at', 'updated_at'
     ];
 
     /**
@@ -21,13 +21,14 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
     ];
 
+
     /**
-     * Courses which user has opted
+     * Course timings
      */
-    public function courses(){
-        return $this->belongsToMany('App\Course');
+    public function course()
+    {
+        return $this->belongsTo('App\Course');
     }
 }

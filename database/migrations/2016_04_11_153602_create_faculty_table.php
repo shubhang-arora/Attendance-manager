@@ -12,7 +12,7 @@ class CreateFacultyTable extends Migration
      */
     public function up()
     {
-        Schema::create('faculties', function (Blueprint $table) {
+        /*Schema::create('faculties', function (Blueprint $table) {
             $table->integer('user_id')->unsigned();
             $table->integer('course_id')->unsigned();
             $table->timestamps();
@@ -26,7 +26,7 @@ class CreateFacultyTable extends Migration
                 ->references('id')
                 ->on('courses')
                 ->onDelete('cascade');
-        });
+        });*/
     }
 
     /**
@@ -36,6 +36,8 @@ class CreateFacultyTable extends Migration
      */
     public function down()
     {
+        /*
         Schema::drop('faculties');
+        */
     }
 }

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCourseTable extends Migration
+class AddDayColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,8 @@ class CreateCourseTable extends Migration
      */
     public function up()
     {
-        Schema::create('courses', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('course_name')->unique();
-            $table->timestamps();
+        Schema::table('timings', function (Blueprint $table) {
+            $table->integer('day');
         });
     }
 
@@ -26,6 +24,8 @@ class CreateCourseTable extends Migration
      */
     public function down()
     {
-        Schema::drop('courses');
+        Schema::table('timings', function (Blueprint $table) {
+            $table->dropColumn('day');
+        });
     }
 }

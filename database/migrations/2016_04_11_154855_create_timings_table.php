@@ -14,8 +14,8 @@ class CreateTimingsTable extends Migration
     {
         Schema::create('timings', function (Blueprint $table) {
             $table->integer('course_id')->unsigned();
-            $table->timestamp('start_time');
-            $table->timestamp('end_time');
+            $table->string('start_time');
+            $table->string('end_time');
             $table->timestamps();
 
 
