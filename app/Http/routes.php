@@ -25,9 +25,11 @@
 
 Route::group(['middleware' => ['web']], function () {
 
-    Route::get('/', function () {
+    Route::get('/',['middleware'    =>  'auth', function () {
         return view('addCourse');
-    });
+    }]);
+
+
     Route::get('/attendance', function () {
         return view('putAttendance');
     });
@@ -35,8 +37,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/dd', 'CoursesController@dd');
 
 });
-Route::post('/addCourse', 'CoursesController@addCourse');
 
+Route::post('/addCourse', 'CoursesController@addCourse');
 
 Route::group(['middleware' => 'web'], function () {
     Route::auth();

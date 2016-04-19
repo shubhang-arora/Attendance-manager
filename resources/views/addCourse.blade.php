@@ -85,6 +85,7 @@
         </script>
 @endsection
 @section('content')
+
     <div id="calendar"></div>
     <div class="modal fade" role="dialog" id="register">
         <div class="modal-dialog">
