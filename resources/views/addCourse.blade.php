@@ -35,6 +35,7 @@
                     var modal = $(this);
                     modal.find('#start').val(startTime);
                     if(endTime!=undefined){
+                        modal.find('#code').prop('required',true);
                         modal.find('#end').parent().show();
                         if(Date.parse('01/01/2011 '+startTime) > Date.parse('01/01/2011 '+endTime)){
                             modal.find('#end').parent().addClass('has-error');
@@ -58,19 +59,24 @@
                 });
                 $(modal).on('click','button.submit', function () {
                     if($(this).text()=='Confirm Details'){
-                        console.log(endTime);
-                        $.ajax({
-                            url: '/addCourse',//Make a route a type it here
-                            data: {
-                                start: startTime,
-                                end: endTime,
-                                course:modal.find('#code').val()
-                            },
-                            success: function(data) {
-                                //I'll work here
-                            },
-                            type: 'POST'
-                        });
+                        if(modal.find('#code').val()!=''){
+                            $.ajax({
+                                url: '/addCourse',//Make a route a type it here
+                                data: {
+                                    start: startTime,
+                                    end: modal.find('#end').val(),
+                                    course:modal.find('#code').val()
+                                },
+                                success: function(data) {
+                                    //I'll work here
+                                },
+                                type: 'POST'
+                            });
+                            modal.modal('hide');
+                        }
+                    }
+                    else{
+                        modal.modal('hide');
                     }
                 });
 
@@ -86,7 +92,7 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Course Details</h4>
                 </div>
-                <form action="">
+                <form action="#!">
                 <div class="modal-body">
 
                     <div class="form-group">
@@ -106,7 +112,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger cancel" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary submit" data-dismiss="modal">Save changes</button>
+                    <button type="submit" class="btn btn-primary submit">Save changes</button>
                 </div>
                 </form>
             </div><!-- /.modal-content -->
