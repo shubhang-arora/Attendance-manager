@@ -36,9 +36,10 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/dd', 'CoursesController@dd');
 
+    Route::post('/addCourse', 'CoursesController@addCourse');
+
 });
 
-Route::post('/addCourse', 'CoursesController@addCourse');
 
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
